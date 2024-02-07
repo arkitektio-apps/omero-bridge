@@ -187,6 +187,9 @@ async def initialize_omero():
 
     host = await fakts.aget("omero.host")
     port = await fakts.aget("omero.port")
+
+    print("Will Act on behalf of this user")
+    print(user, host, port)
     conn = BlitzGateway(
         user.omero_user.omero_username,
         user.omero_user.omero_password,
