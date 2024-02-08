@@ -20,6 +20,29 @@ import ezomero
 import omero
 from omero.gateway import BlitzGateway
 from typing import Optional
+import contextlib
+
+
+conn_params = {
+    "host": "omero",
+    "port": 4064,
+    "username": "root",
+    "passwd": "omero"
+}
+
+@contextlib.contextmanager
+def conn() -> BlitzGateway:
+    global conn_params
+    x = BlitzGateway(
+        conn_params["username"],
+        conn_params["passwd"],
+        host=conn_params["host"],
+        port=conn_params["port"],
+    )
+    x.connect()
+    yield x
+    x.close()
+
 
 @register
 def yield_dataset_for_project(project: ProjectFragment) -> DatasetFragment:
@@ -53,52 +76,56 @@ def print_metadata(image: ImageFragment) -> None:
 
 
     """
-    image = conn.getObject("Image", image.id)
+    with conn() as c:
+        image = c.getObject("Image", image.id)
 
-    metadata = {}
+        metadata = {}
 
-    physical_size = PhysicalSizeInput(
-        x=image.getPixelSizeX(),
-        y=image.getPixelSizeY(),
-        z=image.getPixelSizeZ(),
-    )
-
-    # Acquisition data
-    if image.getAcquisitionDate():
-        metadata["Acquisition Date"] = str(image.getAcquisitionDate())
-
-    # Channels information
-    channels = []
-    for c in image.getChannels():
-        ch = ChannelInput(
-            name=c.getLabel(),
-            color=c.getColor().getHtml(),
-            emmissionWavelength=c.getEmissionWave(),
-            excitationWavelength=c.getExcitationWave(),
+        physical_size = PhysicalSizeInput(
+            x=image.getPixelSizeX(),
+            y=image.getPixelSizeY(),
+            z=image.getPixelSizeZ(),
         )
-        channels.append(ch)
 
-    metadata["Channels"] = channels
+        # Acquisition data
+        if image.getAcquisitionDate():
+            metadata["Acquisition Date"] = str(image.getAcquisitionDate())
 
-    stage_label = image.getStageLabel()
-    author = image.getAuthor()
+        # Channels information
+        channels = []
+        for c in image.getChannels():
+            ch = ChannelInput(
+                name=c.getLabel(),
+                color=c.getColor().getHtml(),
+                emmissionWavelength=c.getEmissionWave(),
+                excitationWavelength=c.getExcitationWave(),
+            )
+            channels.append(ch)
 
-    objective_settings = image.getObjectiveSettings()
+        metadata["Channels"] = channels
 
-    print(stage_label, author, objective_settings)
+        stage_label = image.getStageLabel()
+        author = image.getAuthor()
 
-    print(physical_size)
-    print(metadata)
+        objective_settings = image.getObjectiveSettings()
 
-    x = OmeroRepresentationInput(
-        channels=channels,
-        acquisitionDate=(
-            str(image.getAcquisitionDate()) if image.getAcquisitionDate() else None
-        ),
-        physicalSize=physical_size,
-    )
+        print(stage_label, author, objective_settings)
+
+        print(physical_size)
+        print(metadata)
+
+        x = OmeroRepresentationInput(
+            channels=channels,
+            acquisitionDate=(
+                str(image.getAcquisitionDate()) if image.getAcquisitionDate() else None
+            ),
+            physicalSize=physical_size,
+        )
 
     print(x)
+
+
+
 
 
 @register
@@ -120,51 +147,53 @@ def image_to_rep(image: ImageFragment) -> RepresentationFragment:
         The representation
     """
     # Pixels and Channels will be loaded automatically as needed
-    image, pixels = ezomero.get_image(conn, int(image.id))
-    print(image.getName(), image.getDescription())
-    physical_size = PhysicalSizeInput(
-        x=image.getPixelSizeX(),
-        y=image.getPixelSizeY(),
-        z=image.getPixelSizeZ(),
-    )
 
-    print(physical_size)
-
-    # Channels information
-    channels = []
-    for c in image.getChannels():
-        ch = ChannelInput(
-            name=c.getLabel(),
-            color=c.getColor().getHtml(),
-            emmissionWavelength=c.getEmissionWave(),
-            excitationWavelength=c.getExcitationWave(),
+    with conn() as c:
+        image, pixels = ezomero.get_image(c, int(image.id))
+        print(image.getName(), image.getDescription())
+        physical_size = PhysicalSizeInput(
+            x=image.getPixelSizeX(),
+            y=image.getPixelSizeY(),
+            z=image.getPixelSizeZ(),
         )
-        channels.append(ch)
 
-    stage_label = image.getStageLabel()
-    author = image.getAuthor()
+        print(physical_size)
 
-    objective_settings = image.getObjectiveSettings()
+        # Channels information
+        channels = []
+        for c in image.getChannels():
+            ch = ChannelInput(
+                name=c.getLabel(),
+                color=c.getColor().getHtml(),
+                emmissionWavelength=c.getEmissionWave(),
+                excitationWavelength=c.getExcitationWave(),
+            )
+            channels.append(ch)
+
+        stage_label = image.getStageLabel()
+        author = image.getAuthor()
+
+        objective_settings = image.getObjectiveSettings()
 
 
-    matrix = np.array([[physical_size.x, 0, 0], [0, physical_size.y, 0], [0, 0, physical_size.z]])
+        matrix = np.array([[physical_size.x, 0, 0], [0, physical_size.y, 0], [0, 0, physical_size.z]])
 
 
 
-    omero = OmeroRepresentationInput(
-        channels=channels,
-        acquisitionDate=(
-            str(image.getAcquisitionDate()) if image.getAcquisitionDate() else None
-        ),
-        physicalSize=physical_size,
-        affineTransformation=matrix,
-    )
-    print("rendered_image:", pixels)
-    
-    
-    f = xr.DataArray(pixels, dims=["t", "z", "y", "x", "c"])
+        omero = OmeroRepresentationInput(
+            channels=channels,
+            acquisitionDate=(
+                str(image.getAcquisitionDate()) if image.getAcquisitionDate() else None
+            ),
+            physicalSize=physical_size,
+            affineTransformation=matrix,
+        )
+        print("rendered_image:", pixels)
+        
+        
+        f = xr.DataArray(pixels, dims=["t", "z", "y", "x", "c"])
 
-    return from_xarray(f, name=image.getName(), omero=omero)
+        return from_xarray(f, name=image.getName(), omero=omero)
 
 
 @register()
@@ -190,14 +219,14 @@ def rep_to_image(image: RepresentationFragment, dataset: Optional[DatasetFragmen
 
     thearray = image.data.transpose("x", "y", "z", "c", "t").compute().data
 
-    x = ezomero.post_image(conn, thearray, image.name, "Uploaded from", dataset_id=int(dataset.id))
-    print("Done")
-    return get_image(x)
+    with conn() as c:
+        x = ezomero.post_image(c, thearray, image.name, "Uploaded from", dataset_id=int(dataset.id))
+        return get_image(x)
 
 
 @startup
 async def initialize_omero():
-    global conn
+    global conn_params
 
     fakts = get_current_fakts()
 
@@ -206,14 +235,11 @@ async def initialize_omero():
     host = await fakts.aget("omero.host")
     port = await fakts.aget("omero.port")
 
-    print("Will Act on behalf of this user")
-    print(user)
-    print("Connecting to OMERO")
-    print(host, port)
-    conn = BlitzGateway(
-        user.omero_user.omero_username,
-        user.omero_user.omero_password,
-        host=host,
-        port=port,
-    )
-    conn.connect()
+    
+
+    conn_params["host"] = host
+    conn_params["port"] = port
+    conn_params["username"] = user.omero_user.omero_username
+    conn_params["passwd"] = user.omero_user.omero_password
+    print("Setting Connection Params to")
+    print(conn_params)

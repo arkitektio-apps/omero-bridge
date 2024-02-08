@@ -1041,4 +1041,724 @@ builds:
     - read
     version: 0.0.4
   selectors: []
-latest_build_run: 3629a360-d68f-46c7-bd4f-aa7c30d72991
+- build_id: 6fa4e005-734a-42f7-a815-c602a8305b27
+  build_run: 2021e340-5df9-4443-b97c-ff4358276bd0
+  description: This is a vanilla flavour
+  flavour: vanilla
+  inspection:
+    definitions:
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchProjects($search: String, $values: [ID!]) {\n  options:\
+            \ projects(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/project'
+        key: project
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: Yield Dataset for Project
+      interfaces: []
+      kind: GENERATOR
+      name: Yield Dataset for Project
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchDatasets($search: String, $values: [ID!]) {\n  options:\
+            \ datasets(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/dataset'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchDatasets($search: String, $values: [ID!]) {\n  options:\
+            \ datasets(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/dataset'
+        key: dataset
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: Yield Image for Dataset
+      interfaces: []
+      kind: GENERATOR
+      name: Yield Image for Dataset
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/image'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/image'
+        key: image
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: Yield Image for Dataset
+      interfaces: []
+      kind: FUNCTION
+      name: Print Metadata
+      portGroups: []
+      returns: []
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        description: The image to convert
+        identifier: '@omero-ark/image'
+        key: image
+        kind: STRUCTURE
+        label: image
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: 'Converts an image to a representation
+
+        on mikro so that it can be used in mikro
+
+        powered workflows'
+      interfaces: []
+      kind: FUNCTION
+      name: Convert an image to Mikro
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query search_representation($search: String, $values: [ID]) {\n\
+            \  options: representations(name: $search, limit: 20, ids: $values) {\n\
+            \    value: id\n    label: name\n  }\n}"
+          ward: mikro
+        description: The representation
+        identifier: '@mikro/representation'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query search_representation($search: String, $values: [ID]) {\n\
+            \  options: representations(name: $search, limit: 20, ids: $values) {\n\
+            \    value: id\n    label: name\n  }\n}"
+          ward: mikro
+        description: The representation to convert
+        identifier: '@mikro/representation'
+        key: image
+        kind: STRUCTURE
+        label: image
+        nullable: false
+        scope: GLOBAL
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchDatasets($search: String, $values: [ID!]) {\n  options:\
+            \ datasets(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        description: The dataset to add the image to
+        identifier: '@omero-ark/dataset'
+        key: dataset
+        kind: STRUCTURE
+        label: dataset
+        nullable: true
+        scope: GLOBAL
+      collections: []
+      description: 'Converts a representation to an image on
+
+        the OMERO server'
+      interfaces: []
+      kind: FUNCTION
+      name: Convert a representation
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        description: The image
+        identifier: '@omero-ark/image'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    size: 1619444014
+  manifest:
+    author: jhnnsrs
+    entrypoint: app
+    identifier: omero-bridge
+    requirements: []
+    scopes:
+    - read
+    version: 0.0.4
+  selectors: []
+- build_id: b571d351-96cc-479e-925d-f32153f8cb41
+  build_run: 71a13c20-92da-4fe7-a686-e67bf9517064
+  description: This is a vanilla flavour
+  flavour: vanilla
+  inspection:
+    definitions:
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchProjects($search: String, $values: [ID!]) {\n  options:\
+            \ projects(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/project'
+        key: project
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: Yield Dataset for Project
+      interfaces: []
+      kind: GENERATOR
+      name: Yield Dataset for Project
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchDatasets($search: String, $values: [ID!]) {\n  options:\
+            \ datasets(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/dataset'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchDatasets($search: String, $values: [ID!]) {\n  options:\
+            \ datasets(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/dataset'
+        key: dataset
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: Yield Image for Dataset
+      interfaces: []
+      kind: GENERATOR
+      name: Yield Image for Dataset
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/image'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/image'
+        key: image
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: Yield Image for Dataset
+      interfaces: []
+      kind: FUNCTION
+      name: Print Metadata
+      portGroups: []
+      returns: []
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        description: The image to convert
+        identifier: '@omero-ark/image'
+        key: image
+        kind: STRUCTURE
+        label: image
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: 'Converts an image to a representation
+
+        on mikro so that it can be used in mikro
+
+        powered workflows'
+      interfaces: []
+      kind: FUNCTION
+      name: Convert an image to Mikro
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query search_representation($search: String, $values: [ID]) {\n\
+            \  options: representations(name: $search, limit: 20, ids: $values) {\n\
+            \    value: id\n    label: name\n  }\n}"
+          ward: mikro
+        description: The representation
+        identifier: '@mikro/representation'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query search_representation($search: String, $values: [ID]) {\n\
+            \  options: representations(name: $search, limit: 20, ids: $values) {\n\
+            \    value: id\n    label: name\n  }\n}"
+          ward: mikro
+        description: The representation to convert
+        identifier: '@mikro/representation'
+        key: image
+        kind: STRUCTURE
+        label: image
+        nullable: false
+        scope: GLOBAL
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchDatasets($search: String, $values: [ID!]) {\n  options:\
+            \ datasets(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        description: The dataset to add the image to
+        identifier: '@omero-ark/dataset'
+        key: dataset
+        kind: STRUCTURE
+        label: dataset
+        nullable: true
+        scope: GLOBAL
+      collections: []
+      description: 'Converts a representation to an image on
+
+        the OMERO server'
+      interfaces: []
+      kind: FUNCTION
+      name: Convert a representation
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        description: The image
+        identifier: '@omero-ark/image'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    size: 1619450591
+  manifest:
+    author: jhnnsrs
+    entrypoint: app
+    identifier: omero-bridge
+    requirements: []
+    scopes:
+    - read
+    version: 0.0.4
+  selectors: []
+- build_id: 356fe6db-98e0-4ad1-a285-417cb18099f4
+  build_run: ce88c782-c548-4933-a870-d4792614caf2
+  description: This is a vanilla flavour
+  flavour: vanilla
+  inspection:
+    definitions:
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchProjects($search: String, $values: [ID!]) {\n  options:\
+            \ projects(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/project'
+        key: project
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: Yield Dataset for Project
+      interfaces: []
+      kind: GENERATOR
+      name: Yield Dataset for Project
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchDatasets($search: String, $values: [ID!]) {\n  options:\
+            \ datasets(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/dataset'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchDatasets($search: String, $values: [ID!]) {\n  options:\
+            \ datasets(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/dataset'
+        key: dataset
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: Yield Image for Dataset
+      interfaces: []
+      kind: GENERATOR
+      name: Yield Image for Dataset
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/image'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/image'
+        key: image
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: Yield Image for Dataset
+      interfaces: []
+      kind: FUNCTION
+      name: Print Metadata
+      portGroups: []
+      returns: []
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        description: The image to convert
+        identifier: '@omero-ark/image'
+        key: image
+        kind: STRUCTURE
+        label: image
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: 'Converts an image to a representation
+
+        on mikro so that it can be used in mikro
+
+        powered workflows'
+      interfaces: []
+      kind: FUNCTION
+      name: Convert an image to Mikro
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query search_representation($search: String, $values: [ID]) {\n\
+            \  options: representations(name: $search, limit: 20, ids: $values) {\n\
+            \    value: id\n    label: name\n  }\n}"
+          ward: mikro
+        description: The representation
+        identifier: '@mikro/representation'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query search_representation($search: String, $values: [ID]) {\n\
+            \  options: representations(name: $search, limit: 20, ids: $values) {\n\
+            \    value: id\n    label: name\n  }\n}"
+          ward: mikro
+        description: The representation to convert
+        identifier: '@mikro/representation'
+        key: image
+        kind: STRUCTURE
+        label: image
+        nullable: false
+        scope: GLOBAL
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchDatasets($search: String, $values: [ID!]) {\n  options:\
+            \ datasets(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        description: The dataset to add the image to
+        identifier: '@omero-ark/dataset'
+        key: dataset
+        kind: STRUCTURE
+        label: dataset
+        nullable: true
+        scope: GLOBAL
+      collections: []
+      description: 'Converts a representation to an image on
+
+        the OMERO server'
+      interfaces: []
+      kind: FUNCTION
+      name: Convert a representation
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        description: The image
+        identifier: '@omero-ark/image'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    size: 1619456874
+  manifest:
+    author: jhnnsrs
+    entrypoint: app
+    identifier: omero-bridge
+    requirements: []
+    scopes:
+    - read
+    version: 0.0.4
+  selectors: []
+- build_id: 99667190-7a49-4411-8823-8b4be2d35944
+  build_run: cb3a44b6-22d6-4592-8229-7c48e1d203b7
+  description: This is a vanilla flavour
+  flavour: vanilla
+  inspection:
+    definitions:
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchProjects($search: String, $values: [ID!]) {\n  options:\
+            \ projects(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/project'
+        key: project
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: Yield Dataset for Project
+      interfaces: []
+      kind: GENERATOR
+      name: Yield Dataset for Project
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchDatasets($search: String, $values: [ID!]) {\n  options:\
+            \ datasets(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/dataset'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchDatasets($search: String, $values: [ID!]) {\n  options:\
+            \ datasets(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/dataset'
+        key: dataset
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: Yield Image for Dataset
+      interfaces: []
+      kind: GENERATOR
+      name: Yield Image for Dataset
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/image'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        identifier: '@omero-ark/image'
+        key: image
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: Yield Image for Dataset
+      interfaces: []
+      kind: FUNCTION
+      name: Print Metadata
+      portGroups: []
+      returns: []
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        description: The image to convert
+        identifier: '@omero-ark/image'
+        key: image
+        kind: STRUCTURE
+        label: image
+        nullable: false
+        scope: GLOBAL
+      collections: []
+      description: 'Converts an image to a representation
+
+        on mikro so that it can be used in mikro
+
+        powered workflows'
+      interfaces: []
+      kind: FUNCTION
+      name: Convert an image to Mikro
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query search_representation($search: String, $values: [ID]) {\n\
+            \  options: representations(name: $search, limit: 20, ids: $values) {\n\
+            \    value: id\n    label: name\n  }\n}"
+          ward: mikro
+        description: The representation
+        identifier: '@mikro/representation'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    - args:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query search_representation($search: String, $values: [ID]) {\n\
+            \  options: representations(name: $search, limit: 20, ids: $values) {\n\
+            \    value: id\n    label: name\n  }\n}"
+          ward: mikro
+        description: The representation to convert
+        identifier: '@mikro/representation'
+        key: image
+        kind: STRUCTURE
+        label: image
+        nullable: false
+        scope: GLOBAL
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchDatasets($search: String, $values: [ID!]) {\n  options:\
+            \ datasets(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        description: The dataset to add the image to
+        identifier: '@omero-ark/dataset'
+        key: dataset
+        kind: STRUCTURE
+        label: dataset
+        nullable: true
+        scope: GLOBAL
+      collections: []
+      description: 'Converts a representation to an image on
+
+        the OMERO server'
+      interfaces: []
+      kind: FUNCTION
+      name: Convert a representation
+      portGroups: []
+      returns:
+      - assignWidget:
+          kind: SearchWidget
+          query: "query SearchImages($search: String, $values: [ID!]) {\n  options:\
+            \ images(\n    filters: {search: $search, ids: $values}\n    pagination:\
+            \ {limit: 10}\n  ) {\n    value: id\n    label: name\n  }\n}"
+          ward: omero-ark
+        description: The image
+        identifier: '@omero-ark/image'
+        key: return0
+        kind: STRUCTURE
+        nullable: false
+        scope: GLOBAL
+    size: 1619463118
+  manifest:
+    author: jhnnsrs
+    entrypoint: app
+    identifier: omero-bridge
+    requirements: []
+    scopes:
+    - read
+    version: 0.0.5
+  selectors: []
+latest_build_run: cb3a44b6-22d6-4592-8229-7c48e1d203b7
