@@ -190,7 +190,7 @@ def rep_to_image(image: RepresentationFragment, dataset: Optional[DatasetFragmen
 
     thearray = image.data.transpose("x", "y", "z", "c", "t").compute().data
 
-    x = ezomero.post_image(conn, thearray, image.name, "Uploaded from", dataset_id=dataset.id)
+    x = ezomero.post_image(conn, thearray, image.name, "Uploaded from", dataset_id=int(dataset.id))
     print("Done")
     return get_image(x)
 
