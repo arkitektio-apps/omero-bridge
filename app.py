@@ -19,7 +19,7 @@ from fakts import get_current_fakts
 import ezomero
 import omero
 from omero.gateway import BlitzGateway
-
+from typing import Optional
 
 @register
 def yield_dataset_for_project(project: ProjectFragment) -> DatasetFragment:
@@ -103,7 +103,11 @@ def print_metadata(image: ImageFragment) -> None:
 
 @register
 def image_to_rep(image: ImageFragment) -> RepresentationFragment:
-    """Convert an image
+    """Convert an image to Mikro
+
+    Converts an image to a representation
+    on mikro so that it can be used in mikro
+    powered workflows
 
     Parameters
     ----------
@@ -142,27 +146,41 @@ def image_to_rep(image: ImageFragment) -> RepresentationFragment:
 
     objective_settings = image.getObjectiveSettings()
 
+
+    matrix = np.array([[physical_size.x, 0, 0], [0, physical_size.y, 0], [0, 0, physical_size.z]])
+
+
+
     omero = OmeroRepresentationInput(
         channels=channels,
         acquisitionDate=(
             str(image.getAcquisitionDate()) if image.getAcquisitionDate() else None
         ),
         physicalSize=physical_size,
+        affineTransformation=matrix,
     )
     print("rendered_image:", pixels)
+    
+    
     f = xr.DataArray(pixels, dims=["t", "z", "y", "x", "c"])
 
     return from_xarray(f, name=image.getName(), omero=omero)
 
 
 @register()
-def rep_to_image(image: RepresentationFragment) -> ImageFragment:
+def rep_to_image(image: RepresentationFragment, dataset: Optional[DatasetFragment]) -> ImageFragment:
     """Convert a representation
+
+    Converts a representation to an image on
+    the OMERO server
 
     Parameters
     ----------
     image : RepresentationFragment
         The representation to convert
+
+    dataset : Optional[DatasetFragment]
+        The dataset to add the image to
 
     Returns
     -------
@@ -172,7 +190,7 @@ def rep_to_image(image: RepresentationFragment) -> ImageFragment:
 
     thearray = image.data.transpose("x", "y", "z", "c", "t").compute().data
 
-    x = ezomero.post_image(conn, thearray, image.name)
+    x = ezomero.post_image(conn, thearray, image.name, "Uploaded from", dataset_id=dataset.id)
     print("Done")
     return get_image(x)
 
@@ -189,7 +207,9 @@ async def initialize_omero():
     port = await fakts.aget("omero.port")
 
     print("Will Act on behalf of this user")
-    print(user, host, port)
+    print(user)
+    print("Connecting to OMERO")
+    print(host, port)
     conn = BlitzGateway(
         user.omero_user.omero_username,
         user.omero_user.omero_password,
